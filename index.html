@@ -1451,11 +1451,36 @@
       opacity: 1;
       transform: none;
       transition-delay: .95s;
+    }    /* ── LANG TOGGLE ── */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-left: 0.5rem;
+    }
+
+    .lang-toggle:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .lang-flag {
+      font-size: 1.1em;
     }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .nav-right {
+      .nav-right .nav-pill {
         display: none;
       }
 
@@ -1480,15 +1505,18 @@
 
   <div class="sidebar-overlay" id="overlay"></div>
 
+  <!-- Lang transition overlay -->
+  <div id="lang-veil" style="position:fixed;inset:0;background:var(--bg);opacity:0;pointer-events:none;z-index:9998;transition:opacity .25s ease;"></div>
+
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">nf.dev / menu</div>
     <nav class="sidebar-nav">
-      <a href="#hero" class="active"><span class="nav-num">00</span> Home</a>
-      <a href="#about"> <span class="nav-num">01</span> About</a>
-      <a href="#experience"> <span class="nav-num">02</span> Experience</a>
-      <a href="#skills"> <span class="nav-num">03</span> Skills</a>
-      <a href="#projects"> <span class="nav-num">04</span> Projects</a>
-      <a href="#contact"> <span class="nav-num">05</span> Contact</a>
+      <a href="#hero" class="active"><span class="nav-num">00</span> <span data-i18n="nav-home">Home</span></a>
+      <a href="#about"> <span class="nav-num">01</span> <span data-i18n="nav-about">About</span></a>
+      <a href="#experience"> <span class="nav-num">02</span> <span data-i18n="nav-experience">Experience</span></a>
+      <a href="#skills"> <span class="nav-num">03</span> <span data-i18n="nav-skills">Skills</span></a>
+      <a href="#projects"> <span class="nav-num">04</span> <span data-i18n="nav-projects">Projects</span></a>
+      <a href="#contact"> <span class="nav-num">05</span> <span data-i18n="nav-contact">Contact</span></a>
     </nav>
     <div class="sidebar-footer">
       <a href="https://github.com/NunzioFornitto" target="_blank">github.com/NunzioFornitto</a><br />
@@ -1507,7 +1535,11 @@
     <div class="nav-right">
       <a href="https://github.com/NunzioFornitto" target="_blank" class="nav-pill">GitHub ↗</a>
       <a href="https://linkedin.com/in/nunzio-fornitto" target="_blank" class="nav-pill">LinkedIn ↗</a>
-      <a href="#contact" class="nav-pill" style="border-color:rgba(123,108,255,.4);color:var(--accent);">Contact</a>
+      <a href="#contact" class="nav-pill" style="border-color:rgba(123,108,255,.4);color:var(--accent);" data-i18n="nav-contact">Contact</a>
+      <button id="langToggle" class="lang-toggle" aria-label="Switch language">
+        <span class="lang-flag">🇬🇧</span>
+        <span class="lang-label">EN</span>
+      </button>
     </div>
   </nav>
 
@@ -1523,14 +1555,12 @@
       <div class="container">
         <div class="hero-grid">
           <div>
-            <p class="hero-tag">// Software Engineer</p>
+            <p class="hero-tag" data-i18n="hero-tag">// Software Engineer</p>
             <h1 class="hero-name">Nunzio<br /><span>Fornitto</span></h1>
-            <p class="hero-role">MSc Computer Engineering · Italy</p>
-            <p class="hero-desc">Passionate about building software systems from embedded firmware to distributed cloud
-              architectures. Recently graduated with 109/110 at University of Catania. Open to new challenges across
-              Europe.</p>
+            <p class="hero-role" data-i18n="hero-role">MSc Computer Engineering · Italy</p>
+            <p class="hero-desc" data-i18n="hero-desc">Passionate about building software systems from embedded firmware to distributed cloud architectures. Recently graduated with 109/110 at University of Catania. Open to new challenges across Europe.</p>
             <div class="hero-cta">
-              <a href="#contact" class="btn btn-primary">Get in touch →</a>
+              <a href="#contact" class="btn btn-primary" data-i18n="hero-cta-primary">Get in touch →</a>
               <a href="https://github.com/NunzioFornitto" target="_blank" class="btn btn-outline">GitHub ↗</a>
             </div>
           </div>
@@ -1571,35 +1601,27 @@
       <div class="container">
         <div class="reveal">
           <div class="section-header">
-            <p class="section-eyebrow">// 01 — about</p>
-            <h2 class="section-title">Who I <span>am</span></h2>
+            <p class="section-eyebrow" data-i18n="about-eyebrow">// 01 — about</p>
+            <h2 class="section-title" data-i18n="about-title">Who I <span>am</span></h2>
             <div class="divider"></div>
           </div>
         </div>
         <div class="about-grid reveal">
           <div class="about-text">
-            <p>I'm a <strong>Software Engineer</strong> from Italy with a strong academic background in Computer
-              Engineering. My passion lives at the intersection of software architecture, embedded systems, and
-              intelligent data pipelines.</p>
-            <p>During my master's thesis at <strong>Leonardo S.p.A.</strong>, I developed Matlab/Simulink models for
-              train dynamics and integrated them into a <strong>VR train driving simulator</strong> for Trenitalia —
-              bridging physics modeling with real-time software engineering.</p>
-            <p>I thrive in technically challenging environments where clean code, system design, and curiosity matter.
-              Looking to grow and take on impactful engineering roles across Europe.</p>
+            <p data-i18n="about-p1">I'm a <strong>Software Engineer</strong> from Italy with a strong academic background in Computer Engineering. My passion lives at the intersection of software architecture, embedded systems, and intelligent data pipelines.</p>
+            <p data-i18n="about-p2">During my master's thesis at <strong>Leonardo S.p.A.</strong>, I developed Matlab/Simulink models for train dynamics and integrated them into a <strong>VR train driving simulator</strong> for Trenitalia — bridging physics modeling with real-time software engineering.</p>
+            <p data-i18n="about-p3">I thrive in technically challenging environments where clean code, system design, and curiosity matter. Looking to grow and take on impactful engineering roles across Europe.</p>
           </div>
           <ul class="info-list">
-            <li><span class="key">degree</span><span class="val">MSc Computer Engineering</span></li>
-            <li><span class="key">university</span><span class="val">Università di Catania</span></li>
-            <li><span class="key">msc grade</span><span class="val">109 / 110</span></li>
-            <li><span class="key">bsc grade</span><span class="val">105 / 110</span></li>
-            <li><span class="key">language</span><span class="val">Italian (native) · English (B1)</span></li>
-            <li><span class="key">mobility</span><span class="val">Available for Europe</span></li>
-            <li><span class="key">github</span><a href="https://github.com/NunzioFornitto"
-                target="_blank">NunzioFornitto ↗</a></li>
-            <li><span class="key">linkedin</span><a href="https://linkedin.com/in/nunzio-fornitto"
-                target="_blank">nunzio-fornitto ↗</a></li>
-            <li><span class="key">email</span><a href="mailto:nfornitto@gmail.com">nfornitto@gmail.com</a>
-            </li>
+            <li><span class="key" data-i18n="info-degree-key">degree</span><span class="val" data-i18n="info-degree-val">MSc Computer Engineering</span></li>
+            <li><span class="key" data-i18n="info-univ-key">university</span><span class="val">Università di Catania</span></li>
+            <li><span class="key" data-i18n="info-msc-key">msc grade</span><span class="val">109 / 110</span></li>
+            <li><span class="key" data-i18n="info-bsc-key">bsc grade</span><span class="val">105 / 110</span></li>
+            <li><span class="key" data-i18n="info-lang-key">language</span><span class="val" data-i18n="info-lang-val">Italian (native) · English (B1)</span></li>
+            <li><span class="key" data-i18n="info-mobility-key">mobility</span><span class="val" data-i18n="info-mobility-val">Available for Europe</span></li>
+            <li><span class="key">github</span><a href="https://github.com/NunzioFornitto" target="_blank">NunzioFornitto ↗</a></li>
+            <li><span class="key">linkedin</span><a href="https://linkedin.com/in/nunzio-fornitto" target="_blank">nunzio-fornitto ↗</a></li>
+            <li><span class="key">email</span><a href="mailto:nfornitto@gmail.com">nfornitto@gmail.com</a></li>
           </ul>
         </div>
       </div>
@@ -1610,8 +1632,8 @@
       <div class="container">
         <div class="reveal">
           <div class="section-header">
-            <p class="section-eyebrow">// 02 — experience & education</p>
-            <h2 class="section-title">My <span>Journey</span></h2>
+            <p class="section-eyebrow" data-i18n="exp-eyebrow">// 02 — experience &amp; education</p>
+            <h2 class="section-title" data-i18n="exp-title">My <span>Journey</span></h2>
             <div class="divider"></div>
           </div>
         </div>
@@ -1620,42 +1642,36 @@
           <div class="tl-item">
             <div class="tl-dot"></div>
             <p class="tl-date">Sep 2025 — Feb 2026</p>
-            <p class="tl-title">Software Engineer Intern</p>
-            <p class="tl-company">Leonardo S.p.A. · Engineering & Design</p>
-            <p class="tl-desc">Developed Matlab/Simulink models for train dynamics and physics simulation. Integrated
-              the models into a pilot Virtual Reality train driving simulator for Trenitalia, bridging mathematical
-              modeling with real-time rendering and control systems.</p>
-            <span class="tl-badge">VR Simulator · Simulink · Embedded · Physics Modeling</span>
+            <p class="tl-title" data-i18n="tl1-title">Software Engineer Intern</p>
+            <p class="tl-company">Leonardo S.p.A. · Engineering &amp; Design</p>
+            <p class="tl-desc" data-i18n="tl1-desc">Developed Matlab/Simulink models for train dynamics and physics simulation. Integrated the models into a pilot Virtual Reality train driving simulator for Trenitalia, bridging mathematical modeling with real-time rendering and control systems.</p>
+            <span class="tl-badge" data-i18n="tl1-badge">VR Simulator · Simulink · Embedded · Physics Modeling</span>
           </div>
 
           <div class="tl-item">
             <div class="tl-dot teal"></div>
             <p class="tl-date">2023 — 2026</p>
-            <p class="tl-title">MSc — Computer Engineering (LM-32)</p>
+            <p class="tl-title" data-i18n="tl2-title">MSc — Computer Engineering (LM-32)</p>
             <p class="tl-company">Università degli Studi di Catania · 109/110</p>
-            <p class="tl-desc">Specialised in embedded systems, real-time architectures, IoT, distributed systems, and
-              machine learning. Thesis: <em>Development of Matlab/Simulink models for train dynamics and their
-                integration into a pilot VR train simulator for Trenitalia.</em></p>
-            <span class="tl-badge">Graduated 11 Mar 2026</span>
+            <p class="tl-desc" data-i18n="tl2-desc">Specialised in embedded systems, real-time architectures, IoT, distributed systems, and machine learning. Thesis: <em>Development of Matlab/Simulink models for train dynamics and their integration into a pilot VR train simulator for Trenitalia.</em></p>
+            <span class="tl-badge" data-i18n="tl2-badge">Graduated 11 Mar 2026</span>
           </div>
 
           <div class="tl-item">
             <div class="tl-dot teal"></div>
             <p class="tl-date">2019 — 2023</p>
-            <p class="tl-title">BSc — Computer Science (L-31)</p>
+            <p class="tl-title" data-i18n="tl3-title">BSc — Computer Science (L-31)</p>
             <p class="tl-company">Università degli Studi di Catania · 105/110</p>
-            <p class="tl-desc">Core curriculum in algorithms, data structures, networking, operating systems and
-              databases. Thesis: <em>Peer-to-peer sharing of copyrighted content</em> — distributed architectures and IT
-              Law analysis.</p>
-            <span class="tl-badge">Graduated 28 Apr 2023</span>
+            <p class="tl-desc" data-i18n="tl3-desc">Core curriculum in algorithms, data structures, networking, operating systems and databases. Thesis: <em>Peer-to-peer sharing of copyrighted content</em> — distributed architectures and IT Law analysis.</p>
+            <span class="tl-badge" data-i18n="tl3-badge">Graduated 28 Apr 2023</span>
           </div>
 
           <div class="tl-item">
             <div class="tl-dot"></div>
             <p class="tl-date">2014 — 2019</p>
-            <p class="tl-title">Technical Certificate — Information Systems</p>
+            <p class="tl-title" data-i18n="tl4-title">Technical Certificate — Information Systems</p>
             <p class="tl-company">I.T.I. Benedetto Radice · 84/100</p>
-            <p class="tl-desc">Technological sector, specialisation in Information Systems and Telecommunications.</p>
+            <p class="tl-desc" data-i18n="tl4-desc">Technological sector, specialisation in Information Systems and Telecommunications.</p>
           </div>
 
         </div>
@@ -1667,8 +1683,8 @@
       <div class="container">
         <div class="reveal">
           <div class="section-header">
-            <p class="section-eyebrow">// 03 — skills</p>
-            <h2 class="section-title">Tech <span>Stack</span></h2>
+            <p class="section-eyebrow" data-i18n="skills-eyebrow">// 03 — skills</p>
+            <h2 class="section-title" data-i18n="skills-title">Tech <span>Stack</span></h2>
             <div class="divider"></div>
           </div>
         </div>
@@ -1792,8 +1808,8 @@
       <div class="container">
         <div class="reveal">
           <div class="section-header">
-            <p class="section-eyebrow">// 04 — projects</p>
-            <h2 class="section-title">What I've <span>Built</span></h2>
+            <p class="section-eyebrow" data-i18n="proj-eyebrow">// 04 — projects</p>
+            <h2 class="section-title" data-i18n="proj-title">What I've <span>Built</span></h2>
             <div class="divider"></div>
           </div>
         </div>
@@ -1804,10 +1820,8 @@
               <div class="project-icon">🚆</div>
               <a href="https://github.com/NunzioFornitto" target="_blank" class="project-link">GitHub ↗</a>
             </div>
-            <div class="project-title">VR Train Driving Simulator</div>
-            <div class="project-desc">Matlab/Simulink models of train dynamics integrated into a pilot VR simulator for
-              Trenitalia at Leonardo S.p.A. Physics-based simulation of traction, braking and track interaction in
-              real-time.</div>
+            <div class="project-title" data-i18n="proj1-title">VR Train Driving Simulator</div>
+            <div class="project-desc" data-i18n="proj1-desc">Matlab/Simulink models of train dynamics integrated into a pilot VR simulator for Trenitalia at Leonardo S.p.A. Physics-based simulation of traction, braking and track interaction in real-time.</div>
             <div class="project-stack">
               <span class="stack-tag">Simulink</span><span class="stack-tag">MATLAB</span>
               <span class="stack-tag">VR</span><span class="stack-tag">Physics Modeling</span>
@@ -1819,10 +1833,8 @@
               <div class="project-icon">🔗</div>
               <a href="https://github.com/NunzioFornitto" target="_blank" class="project-link">GitHub ↗</a>
             </div>
-            <div class="project-title">P2P Copyrighted Content Analysis</div>
-            <div class="project-desc">BSc thesis exploring peer-to-peer architectures for content distribution,
-              analyzing legal implications under Italian and EU IT Law and technical countermeasures in distributed
-              networks.</div>
+            <div class="project-title" data-i18n="proj2-title">P2P Copyrighted Content Analysis</div>
+            <div class="project-desc" data-i18n="proj2-desc">BSc thesis exploring peer-to-peer architectures for content distribution, analyzing legal implications under Italian and EU IT Law and technical countermeasures in distributed networks.</div>
             <div class="project-stack">
               <span class="stack-tag">P2P Networks</span><span class="stack-tag">IT Law</span>
               <span class="stack-tag">Distributed Systems</span>
@@ -1834,9 +1846,8 @@
               <div class="project-icon">🧠</div>
               <a href="https://github.com/NunzioFornitto" target="_blank" class="project-link">GitHub ↗</a>
             </div>
-            <div class="project-title">Academic Projects · GitHub</div>
-            <div class="project-desc">Collection spanning embedded systems on STM32, IoT pipelines with MQTT and Kafka,
-              ML-based predictive maintenance, and network protocol implementations built during university.</div>
+            <div class="project-title" data-i18n="proj3-title">Academic Projects · GitHub</div>
+            <div class="project-desc" data-i18n="proj3-desc">Collection spanning embedded systems on STM32, IoT pipelines with MQTT and Kafka, ML-based predictive maintenance, and network protocol implementations built during university.</div>
             <div class="project-stack">
               <span class="stack-tag">STM32</span><span class="stack-tag">Python</span>
               <span class="stack-tag">Kafka</span><span class="stack-tag">IoT</span><span class="stack-tag">ML</span>
@@ -1845,7 +1856,7 @@
 
         </div>
         <div class="github-cta reveal">
-          <a href="https://github.com/NunzioFornitto" target="_blank" class="btn btn-outline" style="margin:0 auto;">
+          <a href="https://github.com/NunzioFornitto" target="_blank" class="btn btn-outline" style="margin:0 auto;" data-i18n="proj-github-btn">
             View all projects on GitHub ↗
           </a>
         </div>
@@ -1857,16 +1868,15 @@
       <div class="container">
         <div class="reveal">
           <div class="section-header">
-            <p class="section-eyebrow">// 05 — contact</p>
-            <h2 class="section-title">Get in <span>Touch</span></h2>
+            <p class="section-eyebrow" data-i18n="contact-eyebrow">// 05 — contact</p>
+            <h2 class="section-title" data-i18n="contact-title">Get in <span>Touch</span></h2>
             <div class="divider"></div>
           </div>
         </div>
         <div class="contact-grid reveal">
           <div>
-            <p style="color:var(--muted);font-size:.9rem;line-height:1.75;">
-              Open to new opportunities, collaborations, and conversations around software engineering, embedded
-              systems, and AI.
+            <p style="color:var(--muted);font-size:.9rem;line-height:1.75;" data-i18n="contact-desc">
+              Open to new opportunities, collaborations, and conversations around software engineering, embedded systems, and AI.
             </p>
             <div class="contact-links">
               <a href="mailto:nfornitto@gmail.com" class="contact-link">✉️ &nbsp;nfornitto@gmail.com</a>
@@ -1880,24 +1890,24 @@
             <form class="contact-form" id="contactForm">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Name</label>
-                  <input type="text" class="form-input" id="senderName" placeholder="Your name" required />
+                  <label class="form-label" data-i18n="form-name">Name</label>
+                  <input type="text" class="form-input" id="senderName" data-i18n-placeholder="form-name-ph" placeholder="Your name" required />
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Surname</label>
-                  <input type="text" class="form-input" id="senderSurname" placeholder="Your surname" required />
+                  <label class="form-label" data-i18n="form-surname">Surname</label>
+                  <input type="text" class="form-input" id="senderSurname" data-i18n-placeholder="form-surname-ph" placeholder="Your surname" required />
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label">Email</label>
+                <label class="form-label" data-i18n="form-email">Email</label>
                 <input type="email" class="form-input" id="senderEmail" placeholder="your@email.com" required />
               </div>
               <div class="form-group">
-                <label class="form-label">Message</label>
+                <label class="form-label" data-i18n="form-message">Message</label>
                 <textarea class="form-textarea" id="senderMessage"
-                  placeholder="Tell me about your project or opportunity..." required></textarea>
+                  data-i18n-placeholder="form-message-ph" placeholder="Tell me about your project or opportunity..." required></textarea>
               </div>
-              <button type="submit" class="btn btn-primary" style="width:fit-content;">Send message →</button>
+              <button type="submit" class="btn btn-primary" style="width:fit-content;" data-i18n="form-submit">Send message →</button>
               <div class="form-status" id="formStatus"></div>
             </form>
           </div>
@@ -1908,7 +1918,7 @@
   </main>
 
   <footer>
-    <p>Designed & built by <span>Nunzio Fornitto</span> · 2026 · Italy 🇮🇹</p>
+    <p data-i18n="footer-text">Designed &amp; built by <span>Nunzio Fornitto</span> · 2026 · Italy 🇮🇹</p>
   </footer>
 
   <script>
@@ -2056,6 +2066,148 @@
         card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
         card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100) + '%');
       });
+    });
+
+    // ── Language switcher ──
+    const i18n = {
+      en: {
+        'nav-home': 'Home', 'nav-about': 'About', 'nav-experience': 'Experience',
+        'nav-skills': 'Skills', 'nav-projects': 'Projects', 'nav-contact': 'Contact',
+        'hero-tag': '// Software Engineer',
+        'hero-role': 'MSc Computer Engineering · Italy',
+        'hero-desc': 'Passionate about building software systems from embedded firmware to distributed cloud architectures. Recently graduated with 109/110 at University of Catania. Open to new challenges across Europe.',
+        'hero-cta-primary': 'Get in touch →',
+        'about-eyebrow': '// 01 — about',
+        'about-title': 'Who I <span>am</span>',
+        'about-p1': 'I\'m a <strong>Software Engineer</strong> from Italy with a strong academic background in Computer Engineering. My passion lives at the intersection of software architecture, embedded systems, and intelligent data pipelines.',
+        'about-p2': 'During my master\'s thesis at <strong>Leonardo S.p.A.</strong>, I developed Matlab/Simulink models for train dynamics and integrated them into a <strong>VR train driving simulator</strong> for Trenitalia — bridging physics modeling with real-time software engineering.',
+        'about-p3': 'I thrive in technically challenging environments where clean code, system design, and curiosity matter. Looking to grow and take on impactful engineering roles across Europe.',
+        'info-degree-key': 'degree', 'info-degree-val': 'MSc Computer Engineering',
+        'info-univ-key': 'university', 'info-lang-key': 'language',
+        'info-lang-val': 'Italian (native) · English (B1)',
+        'info-mobility-key': 'mobility', 'info-mobility-val': 'Available for Europe',
+        'info-msc-key': 'msc grade', 'info-bsc-key': 'bsc grade',
+        'exp-eyebrow': '// 02 — experience & education',
+        'exp-title': 'My <span>Journey</span>',
+        'tl1-title': 'Software Engineer Intern',
+        'tl1-desc': 'Developed Matlab/Simulink models for train dynamics and physics simulation. Integrated the models into a pilot Virtual Reality train driving simulator for Trenitalia, bridging mathematical modeling with real-time rendering and control systems.',
+        'tl1-badge': 'VR Simulator · Simulink · Embedded · Physics Modeling',
+        'tl2-title': 'MSc — Computer Engineering (LM-32)',
+        'tl2-desc': 'Specialised in embedded systems, real-time architectures, IoT, distributed systems, and machine learning. Thesis: <em>Development of Matlab/Simulink models for train dynamics and their integration into a pilot VR train simulator for Trenitalia.</em>',
+        'tl2-badge': 'Graduated 11 Mar 2026',
+        'tl3-title': 'BSc — Computer Science (L-31)',
+        'tl3-desc': 'Core curriculum in algorithms, data structures, networking, operating systems and databases. Thesis: <em>Peer-to-peer sharing of copyrighted content</em> — distributed architectures and IT Law analysis.',
+        'tl3-badge': 'Graduated 28 Apr 2023',
+        'tl4-title': 'Technical Certificate — Information Systems',
+        'tl4-desc': 'Technological sector, specialisation in Information Systems and Telecommunications.',
+        'skills-eyebrow': '// 03 — skills', 'skills-title': 'Tech <span>Stack</span>',
+        'proj-eyebrow': '// 04 — projects', 'proj-title': 'What I\'ve <span>Built</span>',
+        'proj1-title': 'VR Train Driving Simulator',
+        'proj1-desc': 'Matlab/Simulink models of train dynamics integrated into a pilot VR simulator for Trenitalia at Leonardo S.p.A. Physics-based simulation of traction, braking and track interaction in real-time.',
+        'proj2-title': 'P2P Copyrighted Content Analysis',
+        'proj2-desc': 'BSc thesis exploring peer-to-peer architectures for content distribution, analyzing legal implications under Italian and EU IT Law and technical countermeasures in distributed networks.',
+        'proj3-title': 'Academic Projects · GitHub',
+        'proj3-desc': 'Collection spanning embedded systems on STM32, IoT pipelines with MQTT and Kafka, ML-based predictive maintenance, and network protocol implementations built during university.',
+        'proj-github-btn': 'View all projects on GitHub ↗',
+        'contact-eyebrow': '// 05 — contact', 'contact-title': 'Get in <span>Touch</span>',
+        'contact-desc': 'Open to new opportunities, collaborations, and conversations around software engineering, embedded systems, and AI.',
+        'form-name': 'Name', 'form-name-ph': 'Your name',
+        'form-surname': 'Surname', 'form-surname-ph': 'Your surname',
+        'form-email': 'Email', 'form-message': 'Message',
+        'form-message-ph': 'Tell me about your project or opportunity...',
+        'form-submit': 'Send message →',
+        'footer-text': 'Designed &amp; built by <span>Nunzio Fornitto</span> · 2026 · Italy 🇮🇹',
+        'form-err-fields': 'Please fill in all fields.',
+        'form-sending': 'Sending…', 'form-ok': '✓ Message sent! I\'ll get back to you soon.',
+        'form-err-net': 'Network error. Please try again.',
+      },
+      it: {
+        'nav-home': 'Home', 'nav-about': 'Chi sono', 'nav-experience': 'Esperienza',
+        'nav-skills': 'Competenze', 'nav-projects': 'Progetti', 'nav-contact': 'Contatti',
+        'hero-tag': '// Ingegnere del Software',
+        'hero-role': 'Laurea Magistrale Ing. Informatica · Italia',
+        'hero-desc': 'Appassionato di sistemi software, dal firmware embedded alle architetture cloud distribuite. Laureato con 109/110 all\'Università di Catania. Aperto a nuove sfide in Europa.',
+        'hero-cta-primary': 'Contattami →',
+        'about-eyebrow': '// 01 — chi sono',
+        'about-title': 'Chi <span>sono</span>',
+        'about-p1': 'Sono un <strong>Ingegnere del Software</strong> italiano con una solida formazione accademica in Ingegneria Informatica. La mia passione si trova all\'intersezione tra architettura software, sistemi embedded e pipeline di dati intelligenti.',
+        'about-p2': 'Durante la tesi magistrale presso <strong>Leonardo S.p.A.</strong>, ho sviluppato modelli Matlab/Simulink per la dinamica ferroviaria e li ho integrati in un <strong>simulatore VR di guida del treno</strong> per Trenitalia.',
+        'about-p3': 'Prospero in ambienti tecnicamente stimolanti dove contano codice pulito, design dei sistemi e curiosità. Cerco ruoli ingegneristici di impatto in Europa.',
+        'info-degree-key': 'laurea', 'info-degree-val': 'LM Ingegneria Informatica',
+        'info-univ-key': 'università', 'info-lang-key': 'lingue',
+        'info-lang-val': 'Italiano (madrelingua) · Inglese (B1)',
+        'info-mobility-key': 'disponibilità', 'info-mobility-val': 'Disponibile per l\'Europa',
+        'info-msc-key': 'voto LM', 'info-bsc-key': 'voto L',
+        'exp-eyebrow': '// 02 — esperienza & formazione',
+        'exp-title': 'Il mio <span>Percorso</span>',
+        'tl1-title': 'Tirocinante Ingegnere del Software',
+        'tl1-desc': 'Sviluppato modelli Matlab/Simulink per la dinamica e la simulazione fisica dei treni. Integrati i modelli in un simulatore VR pilota di guida del treno per Trenitalia presso Leonardo S.p.A.',
+        'tl1-badge': 'Simulatore VR · Simulink · Embedded · Modellazione Fisica',
+        'tl2-title': 'LM — Ingegneria Informatica (LM-32)',
+        'tl2-desc': 'Specializzazione in sistemi embedded, architetture real-time, IoT, sistemi distribuiti e machine learning. Tesi: <em>Sviluppo di modelli Matlab/Simulink per la dinamica ferroviaria e integrazione in un simulatore VR pilota per Trenitalia.</em>',
+        'tl2-badge': 'Laureato l\'11 Mar 2026',
+        'tl3-title': 'L — Informatica (L-31)',
+        'tl3-desc': 'Curriculum di base in algoritmi, strutture dati, reti, sistemi operativi e basi di dati. Tesi: <em>Condivisione P2P di contenuti protetti da copyright</em> — architetture distribuite e analisi della normativa IT.',
+        'tl3-badge': 'Laureato il 28 Apr 2023',
+        'tl4-title': 'Diploma Tecnico — Sistemi Informativi',
+        'tl4-desc': 'Settore tecnologico, specializzazione in Sistemi Informativi e Telecomunicazioni.',
+        'skills-eyebrow': '// 03 — competenze', 'skills-title': 'Tech <span>Stack</span>',
+        'proj-eyebrow': '// 04 — progetti', 'proj-title': 'Cosa ho <span>Costruito</span>',
+        'proj1-title': 'Simulatore VR di Guida del Treno',
+        'proj1-desc': 'Modelli Matlab/Simulink della dinamica ferroviaria integrati in un simulatore VR pilota per Trenitalia presso Leonardo S.p.A. Simulazione fisica di trazione, frenatura e interazione col binario in tempo reale.',
+        'proj2-title': 'Analisi Contenuti P2P Protetti',
+        'proj2-desc': 'Tesi triennale sulle architetture peer-to-peer per la distribuzione di contenuti, con analisi delle implicazioni legali nel diritto IT italiano ed europeo e delle contromisure tecniche nelle reti distribuite.',
+        'proj3-title': 'Progetti Accademici · GitHub',
+        'proj3-desc': 'Raccolta di progetti su sistemi embedded con STM32, pipeline IoT con MQTT e Kafka, manutenzione predittiva con ML e implementazioni di protocolli di rete sviluppati durante l\'università.',
+        'proj-github-btn': 'Vedi tutti i progetti su GitHub ↗',
+        'contact-eyebrow': '// 05 — contatti', 'contact-title': 'Scrivimi <span>un messaggio</span>',
+        'contact-desc': 'Aperto a nuove opportunità, collaborazioni e conversazioni su ingegneria del software, sistemi embedded e AI.',
+        'form-name': 'Nome', 'form-name-ph': 'Il tuo nome',
+        'form-surname': 'Cognome', 'form-surname-ph': 'Il tuo cognome',
+        'form-email': 'Email', 'form-message': 'Messaggio',
+        'form-message-ph': 'Raccontami del tuo progetto o opportunità...',
+        'form-submit': 'Invia messaggio →',
+        'footer-text': 'Progettato &amp; sviluppato da <span>Nunzio Fornitto</span> · 2026 · Italia 🇮🇹',
+        'form-err-fields': 'Compila tutti i campi.',
+        'form-sending': 'Invio in corso…', 'form-ok': '✓ Messaggio inviato! Ti risponderò presto.',
+        'form-err-net': 'Errore di rete. Riprova.',
+      }
+    };
+
+    let currentLang = 'en';
+    const veil = document.getElementById('lang-veil');
+
+    function applyLang(lang) {
+      // Translate text nodes
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18n[lang][key] !== undefined) el.innerHTML = i18n[lang][key];
+      });
+      // Translate placeholders
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (i18n[lang][key] !== undefined) el.placeholder = i18n[lang][key];
+      });
+      // Update form status messages data
+      document.documentElement.lang = lang;
+    }
+
+    document.getElementById('langToggle').addEventListener('click', () => {
+      const next = currentLang === 'en' ? 'it' : 'en';
+      // Fade out
+      veil.style.opacity = '1';
+      veil.style.pointerEvents = 'all';
+      setTimeout(() => {
+        applyLang(next);
+        currentLang = next;
+        // Update button
+        const btn = document.getElementById('langToggle');
+        btn.querySelector('.lang-flag').textContent = next === 'en' ? '🇬🇧' : '🇮🇹';
+        btn.querySelector('.lang-label').textContent = next === 'en' ? 'EN' : 'IT';
+        // Fade in
+        veil.style.opacity = '0';
+        veil.style.pointerEvents = 'none';
+      }, 260);
     });
   </script>
 </body>
