@@ -1969,20 +1969,42 @@
       }
     }, { passive: true });
 
-    // ── Scroll reveal (generic .reveal) ──
+    // ── Scroll direction tracker ──
+    let lastScrollY = window.scrollY;
+    let isScrollingDown = true;
+    window.addEventListener('scroll', () => {
+      isScrollingDown = window.scrollY > lastScrollY;
+      lastScrollY = window.scrollY;
+    }, { passive: true });
+
+    // ── Scroll reveal (generic .reveal and .reveal-stagger) ──
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add('visible');
+        if (e.isIntersecting) {
+          if (e.target.classList.contains('reveal-stagger')) {
+            const children = Array.from(e.target.children);
+            children.forEach((child, i) => {
+              // Se si scende: ritardo normale. Se si sale: ritardo inverso.
+              const delay = isScrollingDown ? (i * 0.1) : ((children.length - 1 - i) * 0.1);
+              child.style.transitionDelay = `${delay + 0.05}s`;
+            });
+          }
+          e.target.classList.add('visible');
+        } else {
+          e.target.classList.remove('visible'); // Allow re-triggering
+        }
       });
-    }, { threshold: 0.08 });
+    }, { threshold: 0.1 });
 
     document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
 
     // ── Timeline items individual reveal ──
     const ioTl = new IntersectionObserver(entries => {
-      entries.forEach((e, i) => {
+      entries.forEach((e) => {
         if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 120);
+          e.target.classList.add('visible');
+        } else {
+          e.target.classList.remove('visible'); // Allow re-triggering
         }
       });
     }, { threshold: 0.15 });
