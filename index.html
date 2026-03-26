@@ -1075,23 +1075,53 @@
   };
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // ── Contact form ──
-  document.getElementById('contactForm').addEventListener('submit', function(e) {
+  // ── Contact form (via Formspree) ──
+  document.getElementById('contactForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const name    = document.getElementById('senderName').value.trim();
     const surname = document.getElementById('senderSurname').value.trim();
     const email   = document.getElementById('senderEmail').value.trim();
     const msg     = document.getElementById('senderMessage').value.trim();
     const status  = document.getElementById('formStatus');
+    const btn     = this.querySelector('button[type="submit"]');
+
     if (!name || !surname || !email || !msg) {
       status.textContent = 'Please fill in all fields.';
       status.className = 'form-status error';
       return;
     }
-    const mailto = `mailto:nunzio.fornitto@gmail.com?subject=Portfolio Contact from ${encodeURIComponent(name)} ${encodeURIComponent(surname)}&body=${encodeURIComponent(msg)}%0A%0AFrom: ${encodeURIComponent(email)}`;
-    window.location.href = mailto;
-    status.textContent = 'Opening your email client…';
-    status.className = 'form-status success';
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    status.className = 'form-status';
+
+    try {
+      const res = await fetch('https://formspree.io/f/YOUR_FORM_ID', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `${name} ${surname}`,
+          email,
+          message: msg
+        })
+      });
+
+      if (res.ok) {
+        status.textContent = '✓ Message sent! I\'ll get back to you soon.';
+        status.className = 'form-status success';
+        this.reset();
+      } else {
+        const data = await res.json();
+        status.textContent = data?.errors?.[0]?.message ?? 'Something went wrong. Try again.';
+        status.className = 'form-status error';
+      }
+    } catch (_) {
+      status.textContent = 'Network error. Please try again.';
+      status.className = 'form-status error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Send message →';
+    }
   });
 
   // ── Skill card spotlight effect ──
