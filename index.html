@@ -1451,6 +1451,34 @@
       opacity: 1;
       transform: none;
       transition-delay: .95s;
+    }
+
+    /* ── PROJECTS SLIDER ── */
+    .projects-slider-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin-top: 3rem;
+      /* Masks to fade left and right edges */
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    }
+
+    .projects-track {
+      display: flex;
+      gap: 2rem;
+      width: max-content;
+      /* Animation now handled by JS for interactivity */
+      will-change: transform;
+    }
+
+    /* Each card is fixed width in the slider */
+    .projects-track .project-card {
+      width: 350px;
+      flex-shrink: 0;
+      white-space: normal; /* Restore normal wrapping inside card */
+      opacity: 1; /* Override original reveal styling */
+      transform: none;
     }    /* ── LANG TOGGLE ── */
     .lang-toggle {
       display: flex;
@@ -1813,49 +1841,13 @@
             <div class="divider"></div>
           </div>
         </div>
-        <div class="projects-grid reveal-stagger">
-
-          <div class="project-card">
-            <div class="project-top">
-              <div class="project-icon">🚆</div>
-              <a href="https://github.com/NunzioFornitto" target="_blank" class="project-link">GitHub ↗</a>
-            </div>
-            <div class="project-title" data-i18n="proj1-title">VR Train Driving Simulator</div>
-            <div class="project-desc" data-i18n="proj1-desc">Matlab/Simulink models of train dynamics integrated into a pilot VR simulator for Trenitalia at Leonardo S.p.A. Physics-based simulation of traction, braking and track interaction in real-time.</div>
-            <div class="project-stack">
-              <span class="stack-tag">Simulink</span><span class="stack-tag">MATLAB</span>
-              <span class="stack-tag">VR</span><span class="stack-tag">Physics Modeling</span>
-            </div>
+        <div class="projects-slider-wrapper reveal">
+          <div class="projects-track" id="projectsTrack">
+            <!-- Cards will be injected here via GitHub API -->
           </div>
-
-          <div class="project-card">
-            <div class="project-top">
-              <div class="project-icon">🔗</div>
-              <a href="https://github.com/NunzioFornitto" target="_blank" class="project-link">GitHub ↗</a>
-            </div>
-            <div class="project-title" data-i18n="proj2-title">P2P Copyrighted Content Analysis</div>
-            <div class="project-desc" data-i18n="proj2-desc">BSc thesis exploring peer-to-peer architectures for content distribution, analyzing legal implications under Italian and EU IT Law and technical countermeasures in distributed networks.</div>
-            <div class="project-stack">
-              <span class="stack-tag">P2P Networks</span><span class="stack-tag">IT Law</span>
-              <span class="stack-tag">Distributed Systems</span>
-            </div>
-          </div>
-
-          <div class="project-card">
-            <div class="project-top">
-              <div class="project-icon">🧠</div>
-              <a href="https://github.com/NunzioFornitto" target="_blank" class="project-link">GitHub ↗</a>
-            </div>
-            <div class="project-title" data-i18n="proj3-title">Academic Projects · GitHub</div>
-            <div class="project-desc" data-i18n="proj3-desc">Collection spanning embedded systems on STM32, IoT pipelines with MQTT and Kafka, ML-based predictive maintenance, and network protocol implementations built during university.</div>
-            <div class="project-stack">
-              <span class="stack-tag">STM32</span><span class="stack-tag">Python</span>
-              <span class="stack-tag">Kafka</span><span class="stack-tag">IoT</span><span class="stack-tag">ML</span>
-            </div>
-          </div>
-
         </div>
-        <div class="github-cta reveal">
+        
+        <div class="github-cta reveal" style="margin-top: 3rem;">
           <a href="https://github.com/NunzioFornitto" target="_blank" class="btn btn-outline" style="margin:0 auto;" data-i18n="proj-github-btn">
             View all projects on GitHub ↗
           </a>
@@ -2101,14 +2093,9 @@
         'tl4-title': 'Technical Certificate — Information Systems',
         'tl4-desc': 'Technological sector, specialisation in Information Systems and Telecommunications.',
         'skills-eyebrow': '// 03 — skills', 'skills-title': 'Tech <span>Stack</span>',
-        'proj-eyebrow': '// 04 — projects', 'proj-title': 'What I\'ve <span>Built</span>',
-        'proj1-title': 'VR Train Driving Simulator',
-        'proj1-desc': 'Matlab/Simulink models of train dynamics integrated into a pilot VR simulator for Trenitalia at Leonardo S.p.A. Physics-based simulation of traction, braking and track interaction in real-time.',
-        'proj2-title': 'P2P Copyrighted Content Analysis',
-        'proj2-desc': 'BSc thesis exploring peer-to-peer architectures for content distribution, analyzing legal implications under Italian and EU IT Law and technical countermeasures in distributed networks.',
-        'proj3-title': 'Academic Projects · GitHub',
-        'proj3-desc': 'Collection spanning embedded systems on STM32, IoT pipelines with MQTT and Kafka, ML-based predictive maintenance, and network protocol implementations built during university.',
+        'proj-eyebrow': '// 04 — projects', 'proj-title': 'Open Source <span>Projects</span>',
         'proj-github-btn': 'View all projects on GitHub ↗',
+        'proj-fallback-desc': 'No description available for this repository.',
         'contact-eyebrow': '// 05 — contact', 'contact-title': 'Get in <span>Touch</span>',
         'contact-desc': 'Open to new opportunities, collaborations, and conversations around software engineering, embedded systems, and AI.',
         'form-name': 'Name', 'form-name-ph': 'Your name',
@@ -2152,14 +2139,9 @@
         'tl4-title': 'Diploma Tecnico — Sistemi Informativi',
         'tl4-desc': 'Settore tecnologico, specializzazione in Sistemi Informativi e Telecomunicazioni.',
         'skills-eyebrow': '// 03 — competenze', 'skills-title': 'Tech <span>Stack</span>',
-        'proj-eyebrow': '// 04 — progetti', 'proj-title': 'Cosa ho <span>Costruito</span>',
-        'proj1-title': 'Simulatore VR di Guida del Treno',
-        'proj1-desc': 'Modelli Matlab/Simulink della dinamica ferroviaria integrati in un simulatore VR pilota per Trenitalia presso Leonardo S.p.A. Simulazione fisica di trazione, frenatura e interazione col binario in tempo reale.',
-        'proj2-title': 'Analisi Contenuti P2P Protetti',
-        'proj2-desc': 'Tesi triennale sulle architetture peer-to-peer per la distribuzione di contenuti, con analisi delle implicazioni legali nel diritto IT italiano ed europeo e delle contromisure tecniche nelle reti distribuite.',
-        'proj3-title': 'Progetti Accademici · GitHub',
-        'proj3-desc': 'Raccolta di progetti su sistemi embedded con STM32, pipeline IoT con MQTT e Kafka, manutenzione predittiva con ML e implementazioni di protocolli di rete sviluppati durante l\'università.',
+        'proj-eyebrow': '// 04 — progetti', 'proj-title': 'Progetti <span>Open Source</span>',
         'proj-github-btn': 'Vedi tutti i progetti su GitHub ↗',
+        'proj-fallback-desc': 'Nessuna descrizione disponibile per questa repository.',
         'contact-eyebrow': '// 05 — contatti', 'contact-title': 'Scrivimi <span>un messaggio</span>',
         'contact-desc': 'Aperto a nuove opportunità, collaborazioni e conversazioni su ingegneria del software, sistemi embedded e AI.',
         'form-name': 'Nome', 'form-name-ph': 'Il tuo nome',
@@ -2209,6 +2191,141 @@
         veil.style.pointerEvents = 'none';
       }, 260);
     });
+
+    // ── Fetch GitHub Projects & READMEs ──
+    async function fetchGitHubProjects() {
+      const track = document.getElementById('projectsTrack');
+      try {
+        const res = await fetch('https://api.github.com/users/NunzioFornitto/repos?sort=updated&per_page=100');
+        if (!res.ok) throw new Error('API Error');
+        const repos = await res.json();
+        
+        // Fetch READMEs in parallel for better performance
+        const reposWithReadme = await Promise.all(repos.map(async repo => {
+          if (repo.fork) return null;
+          
+          let previewText = repo.description || '';
+          try {
+            const branch = repo.default_branch || 'main';
+            // Try fetching raw README
+            const rmRes = await fetch(`https://raw.githubusercontent.com/NunzioFornitto/${repo.name}/${branch}/README.md`);
+            if (rmRes.ok) {
+              const rawMd = await rmRes.text();
+              // Strip markdown: remove headers, images, links, bold, code blocks, and collapse newlines
+              let plainText = rawMd
+                .replace(/<[^>]*>?/gm, '') // HTML tags
+                .replace(/!\[.*?\]\(.*?\)/g, '') // images
+                .replace(/\[(.*?)\]\(.*?\)/g, '$1') // links
+                .replace(/#+\s/g, '') // headers
+                .replace(/[*_~`>]/g, '') // formatting chars
+                .replace(/```[\s\S]*?```/g, '') // code blocks
+                .replace(/\n\s?/g, ' ') // collapse newlines
+                .trim();
+              
+              if (plainText.length > 0) {
+                // Truncate to ~140 chars
+                previewText = plainText.length > 140 ? plainText.substring(0, 140).trim() + '...' : plainText;
+              }
+            }
+          } catch (e) {
+            // Silently fallback to description if README fetch fails
+          }
+
+          return { ...repo, previewText };
+        }));
+
+        let html = '';
+        reposWithReadme.filter(Boolean).forEach(repo => {
+          let langHtml = '';
+          if (repo.language) {
+            langHtml = `<div class="project-stack"><span class="stack-tag">${repo.language}</span></div>`;
+          }
+          
+          const finalDesc = repo.previewText || `<span data-i18n="proj-fallback-desc" style="font-style:italic;color:var(--muted)">${i18n[currentLang]['proj-fallback-desc']}</span>`;
+
+          html += `
+            <div class="project-card">
+              <div class="project-top">
+                <div class="project-icon">📂</div>
+                <a href="${repo.html_url}" target="_blank" class="project-link">GitHub ↗</a>
+              </div>
+              <div class="project-title">${repo.name}</div>
+              <div class="project-desc">${finalDesc}</div>
+              ${langHtml}
+            </div>
+          `;
+        });
+
+        // Insert exactly TWICE for the infinite scroll marquee
+        track.innerHTML = html + html;
+
+        // Apply translations on newly generated nodes if any
+        applyLang(currentLang);
+
+        // ── Interactive Scrolling Animation ──
+        requestAnimationFrame(() => {
+          // Half of the scrollWidth is exactly one set of the cards
+          let halfWidth = track.scrollWidth / 2;
+          let targetVx = -0.5; // Default slow slide left
+          let vx = -0.5;
+          let xPos = 0;
+          let isHovering = false;
+
+          function animateSlider() {
+            vx += (targetVx - vx) * 0.08; // Smooth easing towards target velocity
+            xPos += vx;
+
+            // Seamless wrap logic
+            if (xPos <= -halfWidth) {
+              xPos += halfWidth;
+            } else if (xPos > 0) {
+              xPos -= halfWidth;
+            }
+            
+            track.style.transform = `translateX(${xPos}px)`;
+            requestAnimationFrame(animateSlider);
+          }
+          animateSlider();
+
+          const wrapper = document.querySelector('.projects-slider-wrapper');
+          wrapper.addEventListener('mouseenter', () => { isHovering = true; });
+          wrapper.addEventListener('mouseleave', () => { 
+            isHovering = false; 
+            targetVx = -0.5; // Resume default auto-scroll
+          });
+          
+          wrapper.addEventListener('mousemove', (e) => {
+            if (!isHovering) return;
+            const rect = wrapper.getBoundingClientRect();
+            // Calculate distance from center (-1 to 1)
+            const x = e.clientX - rect.left;
+            const dist = (x - (rect.width / 2)) / (rect.width / 2); 
+            
+            // Dead zone in the center (-0.25 to 0.25) to easily pause and click
+            if (Math.abs(dist) < 0.25) {
+              targetVx = 0;
+            } else {
+              // Mouse on the right (dist > 0) scrolls left (negative velocity)
+              // Mouse on the left (dist < 0) scrolls right (positive velocity)
+              const sign = Math.sign(dist);
+              const activeDist = Math.abs(dist) - 0.25; // mapped 0 to 0.75
+              targetVx = -sign * (activeDist / 0.75) * 6; // Max speed 6px per frame
+            }
+          });
+          
+          // Recalculate width if screen is resized
+          window.addEventListener('resize', () => {
+             halfWidth = track.scrollWidth / 2;
+          });
+        });
+
+      } catch (err) {
+        track.innerHTML = `<p style="color:var(--muted);padding:2rem;">Failed to load projects. Visit my GitHub profile to see them.</p>`;
+      }
+    }
+
+    // Initialize API fetch
+    fetchGitHubProjects();
   </script>
 </body>
 
