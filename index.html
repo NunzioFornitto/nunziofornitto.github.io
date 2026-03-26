@@ -33,6 +33,66 @@
       --font-mono: 'DM Mono', monospace;
     }
 
+    :root.light-mode {
+      --bg: #f8f8fb;
+      --bg2: #ffffff;
+      --bg3: #f0f0f5;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #1a1a24;
+      --muted: #5a5a75;
+      --accent: #5a45ff;
+      --accent2: #00b398;
+      --accent3: #e84a82;
+    }
+
+    /* ── THEME SCOPES (for interactive scrubbing) ── */
+    .light-theme-scope {
+      --bg: #f8f8fb;
+      --bg2: #ffffff;
+      --bg3: #f0f0f5;
+      --border: rgba(0, 0, 0, 0.08);
+      --text: #1a1a24;
+      --muted: #5a5a75;
+      --accent: #5a45ff;
+      --accent2: #00b398;
+      --accent3: #e84a82;
+    }
+
+    .dark-theme-scope {
+      --bg: #0a0a0f;
+      --bg2: #10101a;
+      --bg3: #16162a;
+      --border: rgba(255, 255, 255, 0.06);
+      --text: #e8e8f0;
+      --muted: #6b6b85;
+      --accent: #7b6cff;
+      --accent2: #00d4b4;
+      --accent3: #ff6b9d;
+    }
+
+    /* ── DAY/NIGHT TRANSITION (View Transitions API) ── */
+    ::view-transition-group(root) {
+      animation-duration: 0.7s;
+      animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    ::view-transition-new(root),
+    ::view-transition-old(root) {
+      animation: none;
+      mix-blend-mode: normal;
+    }
+    ::view-transition-old(root) {
+      z-index: 999;
+    }
+    ::view-transition-new(root) {
+      z-index: 1;
+    }
+    .light-mode::view-transition-new(root) {
+      z-index: 999;
+    }
+    .light-mode::view-transition-old(root) {
+      z-index: 1;
+    }
+
     html {
       scroll-behavior: smooth;
     }
@@ -729,6 +789,7 @@
       font-weight: 700;
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: countPulse 3s ease-in-out infinite;
     }
@@ -1506,6 +1567,69 @@
       font-size: 1.1em;
     }
 
+    /* ── THEME SWITCH ── */
+    .theme-switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin-left: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    :root.light-mode .theme-switch {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .theme-switch:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    :root.light-mode .theme-switch:hover {
+      background: rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+    .theme-switch-thumb {
+      position: absolute;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      background: var(--text);
+      border-radius: 50%;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    :root.light-mode .theme-switch-thumb {
+      transform: translateX(20px);
+      background: var(--accent);
+    }
+    .theme-icon {
+      position: absolute;
+      font-size: 0.72rem;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .theme-icon.moon { 
+      left: 6px;
+      opacity: 0.5; 
+    }
+    .theme-icon.sun { 
+      right: 6px;
+      opacity: 0.2;
+    }
+    :root.light-mode .theme-icon.moon { opacity: 0.2; }
+    :root.light-mode .theme-icon.sun { opacity: 0.8; }
+    .theme-switch-thumb {
+      z-index: 2;
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .nav-right .nav-pill {
@@ -1567,6 +1691,11 @@
       <button id="langToggle" class="lang-toggle" aria-label="Switch language">
         <span class="lang-flag">🇬🇧</span>
         <span class="lang-label">EN</span>
+      </button>
+      <button id="themeToggle" class="theme-switch" title="Toggle theme" aria-label="Toggle theme">
+        <span class="theme-icon moon">🌙</span>
+        <span class="theme-icon sun">☀️</span>
+        <span class="theme-switch-thumb"></span>
       </button>
     </div>
   </nav>
@@ -2213,6 +2342,165 @@
         veil.style.pointerEvents = 'none';
       }, 260);
     });
+
+    // ── Theme Switcher with Interactive Scrubbing ──
+    const themeToggle = document.getElementById('themeToggle');
+    const themeThumb = themeToggle.querySelector('.theme-switch-thumb');
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      document.documentElement.classList.add('light-mode');
+    }
+
+    let isDraggingTheme = false;
+    let themeCloneContainer = null;
+    let startDragX = 0;
+    let maxRadius = 0;
+    let isDarkTheme = true;
+    let currentProgress = 0;
+    let dragRafId = null;
+
+    function createThemeClone() {
+      if (themeCloneContainer) return;
+
+      isDarkTheme = !document.documentElement.classList.contains('light-mode');
+
+      themeCloneContainer = document.createElement('div');
+      themeCloneContainer.style.position = 'fixed';
+      themeCloneContainer.style.inset = '0';
+      themeCloneContainer.style.overflow = 'hidden';
+      themeCloneContainer.style.pointerEvents = 'none';
+      themeCloneContainer.style.zIndex = '9998';
+      themeCloneContainer.style.willChange = 'clip-path';
+
+      themeCloneContainer.className = isDarkTheme ? 'light-theme-scope' : 'dark-theme-scope';
+
+      const cloneBody = document.createElement('div');
+      cloneBody.innerHTML = document.body.innerHTML;
+
+      const scripts = cloneBody.querySelectorAll('script');
+      for (let s of scripts) s.remove();
+      const oldClone = cloneBody.querySelector('.dark-theme-scope, .light-theme-scope');
+      if (oldClone) oldClone.remove();
+
+      cloneBody.style.width = window.innerWidth + 'px';
+      cloneBody.style.height = document.body.scrollHeight + 'px';
+      cloneBody.style.transform = `translate(${-window.scrollX}px, ${-window.scrollY}px)`;
+      cloneBody.style.background = 'var(--bg)';
+      cloneBody.style.color = 'var(--text)';
+      cloneBody.style.fontFamily = 'var(--font-display)';
+
+      themeCloneContainer.appendChild(cloneBody);
+      document.body.appendChild(themeCloneContainer);
+
+      const thumbRect = themeThumb.getBoundingClientRect();
+      const thumbCenterX = thumbRect.left + thumbRect.width / 2;
+      const thumbCenterY = thumbRect.top + thumbRect.height / 2;
+
+      maxRadius = Math.hypot(
+        Math.max(thumbCenterX, window.innerWidth - thumbCenterX),
+        Math.max(thumbCenterY, window.innerHeight - thumbCenterY)
+      );
+
+      themeCloneContainer.style.clipPath = `circle(0px at ${thumbCenterX}px ${thumbCenterY}px)`;
+    }
+
+    function updateThemeDrag(e) {
+      if (!isDraggingTheme) return;
+
+      const toggleRect = themeToggle.getBoundingClientRect();
+      const thumbMaxDrag = toggleRect.width - 22;
+
+      const deltaX = e.clientX - startDragX;
+
+      if (isDarkTheme) {
+        currentProgress = Math.max(0, Math.min(1, deltaX / thumbMaxDrag));
+      } else {
+        currentProgress = Math.max(0, Math.min(1, -deltaX / thumbMaxDrag));
+      }
+
+      const r = currentProgress * maxRadius;
+
+      if (!dragRafId) {
+        dragRafId = requestAnimationFrame(() => {
+          dragRafId = null;
+          const thumbOffset = isDarkTheme ? currentProgress * 20 : 20 - (currentProgress * 20);
+          themeThumb.style.transform = `translateX(${thumbOffset}px)`;
+
+          if (themeCloneContainer) {
+            const cloneThumb = themeCloneContainer.querySelector('.theme-switch-thumb');
+            if (cloneThumb) cloneThumb.style.transform = `translateX(${thumbOffset}px)`;
+
+            // Recalculate center based on thumb position
+            const thumbRect = themeThumb.getBoundingClientRect();
+            const thumbCenterX = thumbRect.left + thumbRect.width / 2;
+            const thumbCenterY = thumbRect.top + thumbRect.height / 2;
+            themeCloneContainer.style.clipPath = `circle(${r}px at ${thumbCenterX}px ${thumbCenterY}px)`;
+          }
+        });
+      }
+    }
+
+    function stopThemeDrag() {
+      if (!isDraggingTheme) return;
+      isDraggingTheme = false;
+
+      let isComplete = currentProgress > 0.5;
+      
+      // If it was just a quick click (no drag), toggle automatically
+      if (currentProgress < 0.05) {
+        isComplete = true;
+      }
+
+      themeThumb.style.transform = '';
+      themeToggle.style.transition = '';
+
+      if (themeCloneContainer) {
+        const thumbRect = themeThumb.getBoundingClientRect();
+        const thumbCenterX = thumbRect.left + thumbRect.width / 2;
+        const thumbCenterY = thumbRect.top + thumbRect.height / 2;
+
+        themeCloneContainer.style.transition = 'clip-path 0.3s ease-out';
+        const finalRadius = isComplete ? maxRadius : 0;
+        themeCloneContainer.style.clipPath = `circle(${finalRadius}px at ${thumbCenterX}px ${thumbCenterY}px)`;
+
+        setTimeout(() => {
+          if (isComplete) {
+            document.documentElement.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.documentElement.classList.contains('light-mode') ? 'light' : 'dark');
+          }
+          themeCloneContainer.remove();
+          themeCloneContainer = null;
+        }, 300);
+      }
+      currentProgress = 0;
+    }
+
+    themeToggle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      themeToggle.setPointerCapture(e.pointerId);
+      isDraggingTheme = true;
+      startDragX = e.clientX;
+      currentProgress = 0;
+      createThemeClone();
+      
+      // Use standard interpolation transitions during drag to smooth out 60fps tracking
+      themeThumb.style.transition = 'transform 0.05s linear';
+      themeToggle.style.transition = 'none';
+      if (themeCloneContainer) {
+        themeCloneContainer.style.transition = 'clip-path 0.05s linear';
+        const cloneThumb = themeCloneContainer.querySelector('.theme-switch-thumb');
+        if (cloneThumb) cloneThumb.style.transition = 'transform 0.05s linear';
+      }
+    });
+
+    themeToggle.addEventListener('pointermove', updateThemeDrag);
+    themeToggle.addEventListener('pointerup', (e) => {
+      themeToggle.releasePointerCapture(e.pointerId);
+      stopThemeDrag();
+    });
+    themeToggle.addEventListener('pointercancel', stopThemeDrag);
 
     // ── Fetch GitHub Projects & READMEs ──
     async function fetchGitHubProjects() {
