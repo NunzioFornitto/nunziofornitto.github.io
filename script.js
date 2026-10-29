@@ -178,8 +178,8 @@ const i18n = {
     'tl0-badge': 'DevOps · Red Hat OpenShift · Alerting · Cluster Monitoring',
     'tl-reeturn-date': 'Apr 2026 — Sep 2026',
     'tl-reeturn-title': 'DevOps Engineer',
-    'tl-reeturn-desc': 'Worked as a DevOps Engineer, managing and maintaining Red Hat OpenShift (OCP) clusters at the infrastructure level — monitoring alerts, troubleshooting incidents, and ensuring platform reliability across production environments.',
-    'tl-reeturn-badge': 'DevOps · Red Hat OpenShift · Infrastructure · Cluster Management · Incident Response',
+    'tl-reeturn-desc': 'Working as a DevOps Engineer, focusing on infrastructure automation, CI/CD pipelines, container orchestration, and cloud-native deployment strategies.',
+    'tl-reeturn-badge': 'DevOps · CI/CD · Docker · Kubernetes · Cloud',
     'tl1-title': 'Software Engineer Intern',
     'tl1-desc': 'Developed Matlab/Simulink models for train dynamics and physics simulation. Integrated the models into a pilot Virtual Reality train driving simulator for Trenitalia, bridging mathematical modeling with real-time rendering and control systems.',
     'tl1-badge': 'VR Simulator · Simulink · Embedded · Physics Modeling',
@@ -232,8 +232,8 @@ const i18n = {
     'tl0-badge': 'DevOps · Red Hat OpenShift · Alerting · Monitoraggio Cluster',
     'tl-reeturn-date': 'Apr 2026 — Set 2026',
     'tl-reeturn-title': 'DevOps Engineer',
-    'tl-reeturn-desc': 'Ho lavorato come DevOps Engineer, gestendo e mantenendo cluster Red Hat OpenShift (OCP) a livello infrastrutturale — monitoraggio alert, risoluzione incidenti e garanzia dell\'affidabilità della piattaforma in ambienti di produzione.',
-    'tl-reeturn-badge': 'DevOps · Red Hat OpenShift · Infrastruttura · Gestione Cluster · Incident Response',
+    'tl-reeturn-desc': 'Lavoro come DevOps Engineer, occupandomi di automazione infrastrutturale, pipeline CI/CD, orchestrazione di container e strategie di deployment cloud-native.',
+    'tl-reeturn-badge': 'DevOps · CI/CD · Docker · Kubernetes · Cloud',
     'tl1-title': 'Tirocinante Ingegnere del Software',
     'tl1-desc': 'Sviluppato modelli Matlab/Simulink per la dinamica e la simulazione fisica dei treni. Integrati i modelli in un simulatore VR pilota di guida del treno per Trenitalia presso Leonardo S.p.A.',
     'tl1-badge': 'Simulatore VR · Simulink · Embedded · Modellazione Fisica',
@@ -403,7 +403,7 @@ function stopThemeDrag() {
   isDraggingTheme = false;
 
   let isComplete = currentProgress > 0.5;
-  
+
   // If it was just a quick click (no drag), toggle automatically
   if (currentProgress < 0.05) {
     isComplete = true;
@@ -440,7 +440,7 @@ themeToggle?.addEventListener('pointerdown', (e) => {
   startDragX = e.clientX;
   currentProgress = 0;
   createThemeClone();
-  
+
   if (themeThumb) themeThumb.style.transition = 'transform 0.05s linear';
   if (themeToggle) themeToggle.style.transition = 'none';
   if (themeCloneContainer) {
@@ -465,11 +465,11 @@ async function fetchGitHubProjects() {
     const res = await fetch('https://api.github.com/users/NunzioFornitto/repos?sort=updated&per_page=100');
     if (!res.ok) throw new Error('API Error');
     const repos = await res.json();
-    
+
     // Fetch READMEs in parallel for better performance
     const reposWithReadme = await Promise.all(repos.map(async repo => {
       if (repo.fork) return null;
-      
+
       let previewText = repo.description || '';
       try {
         const branch = repo.default_branch || 'main';
@@ -487,7 +487,7 @@ async function fetchGitHubProjects() {
             .replace(/```[\s\S]*?```/g, '') // code blocks
             .replace(/\n\s?/g, ' ') // collapse newlines
             .trim();
-          
+
           if (plainText.length > 0) {
             // Truncate to ~140 chars
             previewText = plainText.length > 140 ? plainText.substring(0, 140).trim() + '...' : plainText;
@@ -506,7 +506,7 @@ async function fetchGitHubProjects() {
       if (repo.language) {
         langHtml = `<div class="project-stack"><span class="stack-tag">${repo.language}</span></div>`;
       }
-      
+
       const finalDesc = repo.previewText || `<span data-i18n="proj-fallback-desc" style="font-style:italic;color:var(--muted)">${i18n[currentLang]['proj-fallback-desc']}</span>`;
 
       html += `
@@ -546,7 +546,7 @@ async function fetchGitHubProjects() {
         } else if (xPos > 0) {
           xPos -= halfWidth;
         }
-        
+
         track.style.transform = `translateX(${xPos}px)`;
         requestAnimationFrame(animateSlider);
       }
@@ -555,29 +555,29 @@ async function fetchGitHubProjects() {
       const wrapper = document.querySelector('.projects-slider-wrapper');
       if (wrapper) {
         wrapper.addEventListener('mouseenter', () => { isHovering = true; });
-        wrapper.addEventListener('mouseleave', () => { 
-          isHovering = false; 
-          targetVx = -0.5; 
+        wrapper.addEventListener('mouseleave', () => {
+          isHovering = false;
+          targetVx = -0.5;
         });
-        
+
         wrapper.addEventListener('mousemove', (e) => {
           if (!isHovering) return;
           const rect = wrapper.getBoundingClientRect();
           const x = e.clientX - rect.left;
-          const dist = (x - (rect.width / 2)) / (rect.width / 2); 
-          
+          const dist = (x - (rect.width / 2)) / (rect.width / 2);
+
           if (Math.abs(dist) < 0.25) {
             targetVx = 0;
           } else {
             const sign = Math.sign(dist);
-            const activeDist = Math.abs(dist) - 0.25; 
-            targetVx = -sign * (activeDist / 0.75) * 6; 
+            const activeDist = Math.abs(dist) - 0.25;
+            targetVx = -sign * (activeDist / 0.75) * 6;
           }
         });
       }
-      
+
       window.addEventListener('resize', () => {
-         halfWidth = track.scrollWidth / 2;
+        halfWidth = track.scrollWidth / 2;
       });
     });
 
